@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'com.awareframework.ios.sensor.magnetometer_Example' do
+  pod 'com.awareframework.ios.sensor.magnetometer', :path => '../'
+
+  target 'com.awareframework.ios.sensor.magnetometer_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
