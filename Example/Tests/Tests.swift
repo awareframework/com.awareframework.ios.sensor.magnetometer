@@ -1,5 +1,5 @@
 import XCTest
-import com.awareframework.ios.sensor.magnetometer
+import com_awareframework_ios_sensor_magnetometer
 
 class Tests: XCTestCase {
     
