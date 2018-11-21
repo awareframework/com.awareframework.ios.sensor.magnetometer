@@ -24,7 +24,8 @@ class ViewController: UIViewController {
     }
 
     class Observer:MagnetometerObserver {
-        func onChanged(data: MagnetometerData) {
+        
+        func onDataChanged(data: MagnetometerData) {
             print(data)
         }
     }

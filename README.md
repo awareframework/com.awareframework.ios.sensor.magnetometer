@@ -1,6 +1,6 @@
-# com.aware.ios.sensor.magnetometer
+# Aware Magnetometer
 
-[![CI Status](https://img.shields.io/travis/tetujin/com.aware.ios.sensor.magnetometer.svg?style=flat)](https://travis-ci.org/tetujin/com.aware.ios.sensor.magnetometer)
+[![CI Status](https://img.shields.io/travis/awareframework/com.aware.ios.sensor.magnetometer.svg?style=flat)](https://travis-ci.org/awareframework/com.aware.ios.sensor.magnetometer)
 [![Version](https://img.shields.io/cocoapods/v/com.aware.ios.sensor.magnetometer.svg?style=flat)](https://cocoapods.org/pods/com.aware.ios.sensor.magnetometer)
 [![License](https://img.shields.io/cocoapods/l/com.aware.ios.sensor.magnetometer.svg?style=flat)](https://cocoapods.org/pods/com.aware.ios.sensor.magnetometer)
 [![Platform](https://img.shields.io/cocoapods/p/com.aware.ios.sensor.magnetometer.svg?style=flat)](https://cocoapods.org/pods/com.aware.ios.sensor.magnetometer)
@@ -10,6 +10,7 @@
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
 ## Requirements
+iOS 10 or later 
 
 ## Installation
 
@@ -25,6 +26,63 @@ pod 'com.aware.ios.sensor.magnetometer'
 import com_aware_ios_sensor_magnetometer
 ```
 
+## Public functions
+### MagnetometerSensor
+
++ `init(config:MagnetometerSensor.Config?)` : Initializes the magnetometer sensor with the optional configuration.
++ `start()`: Starts the gyroscope sensor with the optional configuration.
++ `stop()`: Stops the service.
+
+### MagnetometerSensor.Config
+
+Class to hold the configuration of the sensor.
+
+#### Fields
++ `sensorObserver: MagnetometerObserver`: Callback for live data updates.
++ `frequency: Int`: Data samples to collect per second (Hz). (default = 5)
++ `period: Double`: Period to save data in minutes. (default = 1)
++ `threshold: Double`: If set, do not record consecutive points if change in value is less than the set value.
++ `enabled: Boolean` Sensor is enabled or not. (default = `false`)
++ `debug: Boolean` enable/disable logging to Xcode console. (default = `false`)
++ `label: String` Label for the data. (default = "")
++ `deviceId: String` Id of the device that will be associated with the events and the sensor. (default = "")
++ `dbEncryptionKey` Encryption key for the database. (default = `null`)
++ `dbType: Engine` Which db engine to use for saving data. (default = `Engine.DatabaseType.NONE`)
++ `dbPath: String` Path of the database. (default = "aware_gyroscope")
++ `dbHost: String` Host for syncing the database. (default = `null`)
+
+## Broadcasts
+
+### Fired Broadcasts
+
++ `MagnetometerSensor.ACTION_AWARE_GYROSCOPE` fired when gyroscope saved data to db after the period ends.
+
+### Received Broadcasts
+
++ `MagnetometerSensor.ACTION_AWARE_MAGNETOMETER_START`: received broadcast to start the sensor.
++ `MagnetometerSensor.ACTION_AWARE_MAGNETOMETER_STOP`: received broadcast to stop the sensor.
++ `MagnetometerSensor.ACTION_AWARE_MAGNETOMETER_SYNC`: received broadcast to send sync attempt to the host.
++ `MagnetometerSensor.ACTION_AWARE_MAGNETOMETER_SET_LABEL`: received broadcast to set the data label. Label is expected in the `MagnetometerSensor.EXTRA_LABEL` field of the intent extras.
+
+## Data Representations
+
+### Magnetometer Data
+
+Contains the raw sensor data.
+
+| Field     | Type   | Description                                                     |
+| --------- | ------ | --------------------------------------------------------------- |
+| x         | Double  | value of X axis                                                 |
+| y         | Double  | value of Y axis                                                 |
+| z         | Double  | value of Z axis                                                 |
+| label     | String | Customizable label. Useful for data calibration or traceability |
+| deviceId  | String | AWARE device UUID                                               |
+| label     | String | Customizable label. Useful for data calibration or traceability |
+| timestamp | Int64   | unixtime milliseconds since 1970                                |
+| timezone  | Int    | Raw timezone offset of the device                          |
+| os        | String | Operating system of the device (ex. ios)                    |
+
+
 ## Example usage
 ```swift
 var magnetometer = MagnetometerSensor.init( MagnetometerSensor.Config().apply{ config in
@@ -36,7 +94,7 @@ magnetometer?.start()
 
 ```swift
 class Observer:MagnetometerObserver {
-    func onChanged(data:MagnetometerData){
+    func onDataChanged(data:MagnetometerData){
         // Your code here..
     }
 }

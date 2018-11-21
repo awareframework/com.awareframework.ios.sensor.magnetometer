@@ -19,7 +19,7 @@ extension Notification.Name{
 }
 
 public protocol MagnetometerObserver{
-    func onChanged(data:MagnetometerData)
+    func onDataChanged(data:MagnetometerData)
 }
 
 extension MagnetometerSensor{
@@ -51,14 +51,14 @@ public class MagnetometerSensor: AwareSensor {
         public var sensorObserver: MagnetometerObserver? = nil
         
         /**
-         * Magnetometer interval in hertz per second: e.g.
+         * Magnetometer frequency in hertz per second: e.g.
          *
          * 0 - fastest
          * 1 - sample per second
          * 5 - sample per second
          * 20 - sample per second
          */
-        public var interval: Int = 5
+        public var frequency: Int = 5
         
         /**
          * Period to save data in minutes. (optional)
@@ -96,7 +96,7 @@ public class MagnetometerSensor: AwareSensor {
     
     public override func start() {
         if self.motion.isMagnetometerAvailable && !self.motion.isMagnetometerActive{
-            self.motion.magnetometerUpdateInterval = 1.0/Double(CONFIG.interval)
+            self.motion.magnetometerUpdateInterval = 1.0/Double(CONFIG.frequency)
             self.motion.startMagnetometerUpdates(to: .main) { (magnetometerData, error) in
                 if let magData = magnetometerData {
                     let x = magData.magneticField.x
@@ -123,7 +123,7 @@ public class MagnetometerSensor: AwareSensor {
                     data.eventTimestamp = Int64(magData.timestamp*1000)
                     
                     if let observer = self.CONFIG.sensorObserver {
-                        observer.onChanged(data: data)
+                        observer.onDataChanged(data: data)
                     }
                     
                     self.dataBuffer.append(data)

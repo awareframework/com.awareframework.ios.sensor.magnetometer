@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'com.awareframework.ios.sensor.magnetometer'
-  s.version          = '0.1.0'
-  s.summary          = 'A short description of com.awareframework.ios.sensor.magnetometer.'
+  s.version          = '0.1.1'
+  s.summary          = 'com.awareframework.ios.sensor.magnetometer (Magnetometer) is a sensor module for Aware Framework.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -17,7 +17,8 @@ Pod::Spec.new do |s|
 #   * Write the description between the DESC delimiters below.
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
-  s.description      = <<-DESC
+com.awareframework.ios.sensor.magnetometer (Magnetometer) is a sensor module for Aware Framework. This module provides calibrated magnetic fields. This data is provided by Core Motion’s sensor fusion algorithms. https://developer.apple.com/documentation/coremotion/cmmotionmanager
+
 TODO: Add long description of the pod here.
                        DESC
 
@@ -30,7 +31,7 @@ TODO: Add long description of the pod here.
 
   s.ios.deployment_target = '10.0'
   
-  s.swift_version = '4.0'
+  s.swift_version = '4.2'
 
   s.source_files = 'com.awareframework.ios.sensor.magnetometer/Classes/**/*'
   
@@ -39,7 +40,7 @@ TODO: Add long description of the pod here.
   # }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
-  s.frameworks = 'CoreMotion' #'UIKit', 'MapKit'
+  s.frameworks = 'CoreMotion'
   # s.dependency 'AFNetworking', '~> 2.3'
   
   s.dependency 'com.awareframework.ios.sensor.core'
