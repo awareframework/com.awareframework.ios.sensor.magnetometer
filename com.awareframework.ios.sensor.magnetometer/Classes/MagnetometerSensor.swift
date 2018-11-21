@@ -37,7 +37,7 @@ extension MagnetometerSensor{
 }
 
 public class MagnetometerSensor: AwareSensor {
-    var CONFIG = Config()
+    public var CONFIG = Config()
     var motion = CMMotionManager()
     var LAST_DATA:CMMagneticField?
     var LAST_TS:Double   = 0.0
