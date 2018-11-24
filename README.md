@@ -1,13 +1,9 @@
 # Aware Magnetometer
 
-[![CI Status](https://img.shields.io/travis/awareframework/com.aware.ios.sensor.magnetometer.svg?style=flat)](https://travis-ci.org/awareframework/com.aware.ios.sensor.magnetometer)
-[![Version](https://img.shields.io/cocoapods/v/com.aware.ios.sensor.magnetometer.svg?style=flat)](https://cocoapods.org/pods/com.aware.ios.sensor.magnetometer)
-[![License](https://img.shields.io/cocoapods/l/com.aware.ios.sensor.magnetometer.svg?style=flat)](https://cocoapods.org/pods/com.aware.ios.sensor.magnetometer)
-[![Platform](https://img.shields.io/cocoapods/p/com.aware.ios.sensor.magnetometer.svg?style=flat)](https://cocoapods.org/pods/com.aware.ios.sensor.magnetometer)
-
-## Example
-
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+[![CI Status](https://img.shields.io/travis/awareframework/com.awareframework.ios.sensor.magnetometer.svg?style=flat)](https://travis-ci.org/awareframework/com.awareframework.ios.sensor.magnetometer)
+[![Version](https://img.shields.io/cocoapods/v/com.awareframework.ios.sensor.magnetometer.svg?style=flat)](https://cocoapods.org/pods/com.awareframework.ios.sensor.magnetometer)
+[![License](https://img.shields.io/cocoapods/l/com.awareframework.ios.sensor.magnetometer.svg?style=flat)](https://cocoapods.org/pods/com.awareframework.ios.sensor.magnetometer)
+[![Platform](https://img.shields.io/cocoapods/p/com.awareframework.ios.sensor.magnetometer.svg?style=flat)](https://cocoapods.org/pods/com.awareframework.ios.sensor.magnetometer)
 
 ## Requirements
 iOS 10 or later 
