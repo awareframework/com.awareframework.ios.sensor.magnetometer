@@ -14,6 +14,48 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "824DFC2F3F788BCE378F51AFBBA238C6"
+               BuildableName = "Pods_com_awareframework_ios_sensor_magnetometer_Example.framework"
+               BlueprintName = "Pods-com.awareframework.ios.sensor.magnetometer_Example"
+               ReferencedContainer = "container:Pods/Pods.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3842B089EEB026F2A5337FF782E1B4BC"
+               BuildableName = "Pods_com_awareframework_ios_sensor_magnetometer_Tests.framework"
+               BlueprintName = "Pods-com.awareframework.ios.sensor.magnetometer_Tests"
+               ReferencedContainer = "container:Pods/Pods.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "28C0590D60F6744A9EAA0F6C8B34DEC2"
+               BuildableName = "com_awareframework_ios_sensor_magnetometer.framework"
+               BlueprintName = "com.awareframework.ios.sensor.magnetometer"
+               ReferencedContainer = "container:Pods/Pods.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "607FACCF1AFB9204008FA782"
                BuildableName = "com.awareframework.ios.sensor.magnetometer_Example.app"
                BlueprintName = "com.awareframework.ios.sensor.magnetometer_Example"
@@ -28,6 +70,16 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "4FD9BCE121AD32820027A0DB"
+               BuildableName = "com.awareframework.ios.sensor.magnetometer_Tests.xctest"
+               BlueprintName = "com.awareframework.ios.sensor.magnetometer_Tests"
+               ReferencedContainer = "container:com.awareframework.ios.sensor.magnetometer.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

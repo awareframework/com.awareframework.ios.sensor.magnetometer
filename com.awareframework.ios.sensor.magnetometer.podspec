@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'com.awareframework.ios.sensor.magnetometer'
   s.version          = '0.1.3'
-  s.summary          = 'com.awareframework.ios.sensor.magnetometer (Magnetometer) is a sensor module for Aware Framework.'
+  s.summary          = 'A Magnetometer Sensor Module for AWARE Framework.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -41,6 +41,6 @@ com.awareframework.ios.sensor.magnetometer (Magnetometer) is a sensor module for
   s.frameworks = 'CoreMotion'
   # s.dependency 'AFNetworking', '~> 2.3'
   
-  s.dependency 'com.awareframework.ios.sensor.core'
+  s.dependency 'com.awareframework.ios.sensor.core', '~> 0.3.1'
   
 end

@@ -5,6 +5,12 @@
 [![License](https://img.shields.io/cocoapods/l/com.awareframework.ios.sensor.magnetometer.svg?style=flat)](https://cocoapods.org/pods/com.awareframework.ios.sensor.magnetometer)
 [![Platform](https://img.shields.io/cocoapods/p/com.awareframework.ios.sensor.magnetometer.svg?style=flat)](https://cocoapods.org/pods/com.awareframework.ios.sensor.magnetometer)
 
+This sensor module allows us to access the current **Magnetic Fluid** data. The data is provided by CMDeviceMotion in Core Motion library. Please check the link below for details. 
+
+[ Apple | Getting Processed Device-Motion Data ](https://developer.apple.com/documentation/coremotion/getting_processed_device-motion_data)
+
+[ Apple | CMDeviceMotion | CMCalibratedMagneticField ](https://developer.apple.com/documentation/coremotion/cmdevicemotion/1616140-magneticfield)
+
 ## Requirements
 iOS 10 or later 
 
