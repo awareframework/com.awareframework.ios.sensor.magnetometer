@@ -165,7 +165,7 @@ public class MagnetometerSensor: AwareSensor {
     
     public override func sync(force: Bool = false) {
         if let engine = self.dbEngine{
-            engine.startSync(MagnetometerData.TABLE_NAME, DbSyncConfig.init().apply(closure: { config in
+            engine.startSync(MagnetometerData.TABLE_NAME, MagnetometerData.self, DbSyncConfig.init().apply(closure: { config in
                 config.debug = self.CONFIG.debug
             }))
             self.notificationCenter.post(name: .actionAwareMagnetometerSync, object: nil)

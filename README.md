@@ -1,4 +1,4 @@
-# Aware Magnetometer
+# AWARE: Magnetometer
 
 [![CI Status](https://img.shields.io/travis/awareframework/com.awareframework.ios.sensor.magnetometer.svg?style=flat)](https://travis-ci.org/awareframework/com.awareframework.ios.sensor.magnetometer)
 [![Version](https://img.shields.io/cocoapods/v/com.awareframework.ios.sensor.magnetometer.svg?style=flat)](https://cocoapods.org/pods/com.awareframework.ios.sensor.magnetometer)
