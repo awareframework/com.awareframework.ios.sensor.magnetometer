@@ -1,42 +1,211 @@
-//
-//  com_awareframework_ios_sensor_magnetometer_Tests.swift
-//  com.awareframework.ios.sensor.magnetometer_Tests
-//
-//  Created by Yuuki Nishiyama on 2018/11/27.
-//  Copyright © 2018 CocoaPods. All rights reserved.
-//
-
 import XCTest
+import RealmSwift
 import com_awareframework_ios_sensor_magnetometer
+import com_awareframework_ios_sensor_core
 
 class com_awareframework_ios_sensor_magnetometer_Tests: XCTestCase {
 
     override func setUp() {
+        super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        Realm.Configuration.defaultConfiguration.inMemoryIdentifier = self.name
     }
-
+    
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
+        super.tearDown()
     }
-
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    
+    func testSensingFrequency(){
+        
+        #if targetEnvironment(simulator)
+        print("This test requires a real device.")
+        
+        #else
+        /////////// 10 FPS //////
+        let sensor = MagnetometerSensor.init(MagnetometerSensor.Config().apply{ config in
+            config.debug = true
+            config.dbType = .REALM
+            config.frequency = 10
+        })
+        sensor.start() // start sensor
+        print(1.0/Double(sensor.CONFIG.frequency))
+        let expect = expectation(description: "Sensing test (10FPS)")
+        let observer = NotificationCenter.default.addObserver(forName: Notification.Name.actionAwareMagnetometer,
+                                                              object: nil,
+                                                              queue: .main) { (notification) in
+            if let engine = sensor.dbEngine {
+                if let results =  engine.fetch(MagnetometerData.TABLE_NAME, MagnetometerData.self, nil) as? Results<Object>{
+                    print(results.count)
+                    if (results.count > 1) {
+                        let idealCount = 60*sensor.CONFIG.frequency
+                        print("ideal count = ",idealCount)
+                        if results.count >= (idealCount-100) && results.count <= (idealCount+100) {
+                            for object in results{
+                                if let o = object as? AwareObject{
+                                    engine.remove(o, MagnetometerData.TABLE_NAME)
+                                }
+                            }
+                            expect.fulfill()
+                        }else{
+                            XCTFail()
+                        }
+                        
+                    }
+                }
+            }
+        }
+        wait(for: [expect], timeout: (sensor.CONFIG.period * 60) + 5)
+        NotificationCenter.default.removeObserver(observer)
+        sensor.stop()
+        
+        #endif
+    }
+    
+    func testSync(){
+        //        let sensor = MagnetometerSensor.init(MagnetometerSensor.Config().apply{ config in
+        //            config.debug = true
+        //            config.dbType = .REALM
+        //            config.dbHost = "node.awareframework.com/dgc"
+        //        })
+        //        sensor.start();
+        //        sensor.enable();
+        //        sensor.sync(force: true)
+        
+        //        let syncManager = DbSyncManager.Builder()
+        //            .setBatteryOnly(false)
+        //            .setWifiOnly(false)
+        //            .setSyncInterval(1)
+        //            .build()
+        //
+        //        syncManager.start()
+    }
+    
+    func testObserver(){
+        #if targetEnvironment(simulator)
+        print("This test requires a real device.")
+        
+        #else
+        
+        class Observer:MagnetometerObserver{
+            // https://www.mokacoding.com/blog/testing-delegates-in-swift-with-xctest/
+            // http://nsblogger.hatenablog.com/entry/2015/02/09/xctestexpectation_api_violation
+            weak var asyncExpectation: XCTestExpectation?
+            func onDataChanged(data: MagnetometerData) {
+                if let syncExp = self.asyncExpectation {
+                    syncExp.fulfill()
+                    asyncExpectation = nil
+                }
+            }
+        }
+        
+        let expectObserver = expectation(description: "observer")
+        let observer = Observer()
+        observer.asyncExpectation = expectObserver
+        let sensor = MagnetometerSensor.init(MagnetometerSensor.Config().apply{ config in
+            config.sensorObserver = observer
+        })
+        sensor.start()
+        
+        waitForExpectations(timeout: 30) { (error) in
+            if let e = error {
+                print(e)
+                XCTFail()
+            }
+        }
+        sensor.stop()
+        
+        #endif
+        
+    }
+    
+    func testControllers(){
+        
+        let sensor = MagnetometerSensor.init(MagnetometerSensor.Config().apply{ config in
+            config.debug = true
+            // config.dbType = .REALM
+        })
+        
+        /// test set label action ///
+        let expectSetLabel = expectation(description: "set label")
+        let newLabel = "hello"
+        let labelObserver = NotificationCenter.default.addObserver(forName: .actionAwareMagnetometerSetLabel, object: nil, queue: .main) { (notification) in
+            let dict = notification.userInfo;
+            if let d = dict as? Dictionary<String,String>{
+                XCTAssertEqual(d[MagnetometerSensor.EXTRA_LABEL], newLabel)
+            }else{
+                XCTFail()
+            }
+            expectSetLabel.fulfill()
+        }
+        sensor.set(label:newLabel)
+        wait(for: [expectSetLabel], timeout: 5)
+        NotificationCenter.default.removeObserver(labelObserver)
+        
+        /// test sync action ////
+        let expectSync = expectation(description: "sync")
+        let syncObserver = NotificationCenter.default.addObserver(forName: Notification.Name.actionAwareMagnetometerSync , object: nil, queue: .main) { (notification) in
+            expectSync.fulfill()
+            print("sync")
+        }
+        sensor.sync()
+        wait(for: [expectSync], timeout: 5)
+        NotificationCenter.default.removeObserver(syncObserver)
+        
+        
+        #if targetEnvironment(simulator)
+        
+        print("Controller tests (start and stop) require a real device.")
+        
+        #else
+        
+        //// test start action ////
+        let expectStart = expectation(description: "start")
+        let observer = NotificationCenter.default.addObserver(forName: .actionAwareMagnetometerStart,
+                                                              object: nil,
+                                                              queue: .main) { (notification) in
+                                                                expectStart.fulfill()
+                                                                print("start")
+        }
+        sensor.start()
+        wait(for: [expectStart], timeout: 5)
+        NotificationCenter.default.removeObserver(observer)
+        
+        
+        /// test stop action ////
+        let expectStop = expectation(description: "stop")
+        let stopObserver = NotificationCenter.default.addObserver(forName: .actionAwareMagnetometerStop, object: nil, queue: .main) { (notification) in
+            expectStop.fulfill()
+            print("stop")
+        }
+        sensor.stop()
+        wait(for: [expectStop], timeout: 5)
+        NotificationCenter.default.removeObserver(stopObserver)
+        
+        #endif
+    }
+    
+    func testMagnetometerData(){
+        let accData = MagnetometerData()
+        let dict = accData.toDictionary()
+        XCTAssertEqual(dict["x"] as! Double, 0)
+        XCTAssertEqual(dict["y"] as! Double, 0)
+        XCTAssertEqual(dict["z"] as! Double, 0)
+        XCTAssertEqual(dict["eventTimestamp"] as! Int64, 0)
     }
     
     func testConfig(){
+        
         let frequency = 1;
         let threshold = 0.5;
-        let period    = 5.0;
+        let period    = 1.0;
         let config :Dictionary<String,Any> = ["frequency":frequency, "threshold":threshold, "period":period]
         
-        // defualt
-        var sensor = MagnetometerSensor.init(MagnetometerSensor.Config());
-        XCTAssertEqual(5, sensor.CONFIG.frequency)
-        XCTAssertEqual(0, sensor.CONFIG.threshold)
-        XCTAssertEqual(1, sensor.CONFIG.period)
-
-        // apply
+        var sensor = MagnetometerSensor.init(MagnetometerSensor.Config(config));
+        XCTAssertEqual(frequency, sensor.CONFIG.frequency)
+        XCTAssertEqual(threshold, sensor.CONFIG.threshold)
+        XCTAssertEqual(period, sensor.CONFIG.period)
+        
         sensor = MagnetometerSensor.init(MagnetometerSensor.Config().apply{config in
             config.frequency = frequency
             config.threshold = threshold
@@ -46,25 +215,11 @@ class com_awareframework_ios_sensor_magnetometer_Tests: XCTestCase {
         XCTAssertEqual(threshold, sensor.CONFIG.threshold)
         XCTAssertEqual(period, sensor.CONFIG.period)
         
-        // init with config
-        sensor = MagnetometerSensor.init(MagnetometerSensor.Config(config))
-        XCTAssertEqual(frequency, sensor.CONFIG.frequency)
-        XCTAssertEqual(threshold, sensor.CONFIG.threshold)
-        XCTAssertEqual(period, sensor.CONFIG.period)
-        
-        // set 
         sensor = MagnetometerSensor.init()
         sensor.CONFIG.set(config: config)
         XCTAssertEqual(frequency, sensor.CONFIG.frequency)
         XCTAssertEqual(threshold, sensor.CONFIG.threshold)
         XCTAssertEqual(period, sensor.CONFIG.period)
+        
     }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
 }

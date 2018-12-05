@@ -171,4 +171,11 @@ public class MagnetometerSensor: AwareSensor {
             self.notificationCenter.post(name: .actionAwareMagnetometerSync, object: nil)
         }
     }
+    
+    public func set(label:String){
+        self.CONFIG.label = label
+        self.notificationCenter.post(name: .actionAwareMagnetometerSetLabel,
+                                     object: nil,
+                                     userInfo: [MagnetometerSensor.EXTRA_LABEL:label])
+    }
 }

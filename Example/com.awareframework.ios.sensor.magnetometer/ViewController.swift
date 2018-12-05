@@ -16,11 +16,11 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        sensor = MagnetometerSensor.init(MagnetometerSensor.Config().apply{config in
-            config.debug = true
-            config.sensorObserver = Observer()
-        })
-        sensor?.start()
+//        sensor = MagnetometerSensor.init(MagnetometerSensor.Config().apply{config in
+//            config.debug = true
+//            config.sensorObserver = Observer()
+//        })
+//        sensor?.start()
     }
 
     class Observer:MagnetometerObserver {
