@@ -78,7 +78,10 @@ public class MagnetometerSensor: AwareSensor {
          */
         public var threshold: Double = 0.0
     
-        public override init(){}
+        public override init() {
+            super.init()
+            dbPath = "aware_magnetometer"
+        }
         
         public override func set(config: Dictionary<String, Any>) {
             super.set(config: config)
