@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'com.awareframework.ios.sensor.magnetometer'
-  s.version       = '0.2.3'
+  s.version       = '0.4.0'
   s.summary          = 'A Magnetometer Sensor Module for AWARE Framework.'
 
 # This description is used to generate tags and improve search results.
@@ -41,6 +41,6 @@ com.awareframework.ios.sensor.magnetometer (Magnetometer) is a sensor module for
   s.frameworks = 'CoreMotion'
   # s.dependency 'AFNetworking', '~> 2.3'
   
-  s.dependency 'com.awareframework.ios.sensor.core', '~> 0.3.3'
+  s.dependency 'com.awareframework.ios.sensor.core', '~> 0.4.1'
   
 end
