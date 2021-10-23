@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'com.awareframework.ios.sensor.magnetometer'
-  s.version       = '0.4.1'
+  s.version          = '0.5.0'
   s.summary          = 'A Magnetometer Sensor Module for AWARE Framework.'
 
 # This description is used to generate tags and improve search results.
@@ -23,7 +23,7 @@ com.awareframework.ios.sensor.magnetometer (Magnetometer) is a sensor module for
   s.homepage         = 'https://github.com/awareframework/com.awareframework.ios.sensor.magnetometer'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'Apache2', :file => 'LICENSE' }
-  s.author           = { 'tetujin' => 'tetujin@ht.sfc.keio.ac.jp' }
+  s.author           = { 'Yuuki Nishiyama' => 'yuukin@iis.u-tokyo.ac.jp' }
   s.source           = { :git => 'https://github.com/awareframework/com.awareframework.ios.sensor.magnetometer.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
@@ -32,15 +32,9 @@ com.awareframework.ios.sensor.magnetometer (Magnetometer) is a sensor module for
   s.swift_version = '4.2'
 
   s.source_files = 'com.awareframework.ios.sensor.magnetometer/Classes/**/*'
-  
-  # s.resource_bundles = {
-  #   'com.awareframework.ios.sensor.magnetometer' => ['com.awareframework.ios.sensor.magnetometer/Assets/*.png']
-  # }
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
   s.frameworks = 'CoreMotion'
-  # s.dependency 'AFNetworking', '~> 2.3'
   
-  s.dependency 'com.awareframework.ios.sensor.core', '~> 0.4.1'
+  s.dependency 'com.awareframework.ios.sensor.core', '~> 0.5.3'
   
 end
