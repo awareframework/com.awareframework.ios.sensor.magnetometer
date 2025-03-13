@@ -38,3 +38,8 @@ Example/Pods
 Example/Podfile.lock
 Pods/
 # com.awareframework.ios.sensor.magnetometer.xcworkspace/
+
+.build
+Packages
+.swiftpm
+.*.sw?

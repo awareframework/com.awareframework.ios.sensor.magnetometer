@@ -1,9 +1,7 @@
 # AWARE: Magnetometer
 
-[![CI Status](https://img.shields.io/travis/awareframework/com.awareframework.ios.sensor.magnetometer.svg?style=flat)](https://travis-ci.org/awareframework/com.awareframework.ios.sensor.magnetometer)
-[![Version](https://img.shields.io/cocoapods/v/com.awareframework.ios.sensor.magnetometer.svg?style=flat)](https://cocoapods.org/pods/com.awareframework.ios.sensor.magnetometer)
-[![License](https://img.shields.io/cocoapods/l/com.awareframework.ios.sensor.magnetometer.svg?style=flat)](https://cocoapods.org/pods/com.awareframework.ios.sensor.magnetometer)
-[![Platform](https://img.shields.io/cocoapods/p/com.awareframework.ios.sensor.magnetometer.svg?style=flat)](https://cocoapods.org/pods/com.awareframework.ios.sensor.magnetometer)
+[![Swift Package Manager compatible](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
+
 
 This sensor module allows us to access the current **Magnetic Fluid** data. The data is provided by CMDeviceMotion in Core Motion library. Please check the link below for details. 
 
@@ -12,9 +10,28 @@ This sensor module allows us to access the current **Magnetic Fluid** data. The 
 [ Apple | CMDeviceMotion | CMCalibratedMagneticField ](https://developer.apple.com/documentation/coremotion/cmdevicemotion/1616140-magneticfield)
 
 ## Requirements
-iOS 10 or later 
+iOS 13 or later 
+
 
 ## Installation
+
+You can integrate this framework into your project via Swift Package Manager (SwiftPM) or CocoaPods.
+
+### SwiftPM
+1. Open Package Manager Windows
+    * Open `Xcode` -> Select `Menu Bar` -> `File` -> `App Package Dependencies...` 
+
+2. Find the package using the manager
+    * Select `Search Package URL` and type `git@github.com:awareframework/com.awareframework.ios.sensor.magnetometer.git`
+
+3. Import the package into your target.
+
+4. Import com.aware.ios.sensor.magnetometer library into your source code.
+```swift
+import com_aware_ios_sensor_magnetometer
+```
+
+### CocoaPods
 
 com.aware.ios.sensor.magnetometer is available through [CocoaPods](https://cocoapods.org). 
 
@@ -104,7 +121,7 @@ class Observer:MagnetometerObserver {
 
 ## Author
 
-Yuuki Nishiyama, tetujin@ht.sfc.keio.ac.jp
+Yuuki Nishiyama (The University of Tokyo), nishiyama@csis.u-tokyo.ac.jp
 
 ## License
 
