@@ -8,7 +8,7 @@
 import UIKit
 import CoreMotion
 import SwiftyJSON
-import com_awareframework_ios_sensor_core
+import com_awareframework_ios_core
 
 extension Notification.Name{
     public static let actionAwareMagnetometer      = Notification.Name(MagnetometerSensor.ACTION_AWARE_MAGNETOMETER)
@@ -50,6 +50,13 @@ public class MagnetometerSensor: AwareSensor {
     var LAST_TS:Double   = Date().timeIntervalSince1970
     var LAST_SAVE:Double = Date().timeIntervalSince1970
     public var dataBuffer = Array<MagnetometerData>()
+    private let motionQueue: OperationQueue = {
+        let queue = OperationQueue()
+        queue.name = "com.awareframework.ios.sensor.magnetometer.motion.queue"
+        queue.maxConcurrentOperationCount = 1
+        queue.qualityOfService = .userInitiated
+        return queue
+    }()
     
     public class Config:SensorConfig{
         /**
@@ -119,7 +126,7 @@ public class MagnetometerSensor: AwareSensor {
     public override func start() {
         if self.motion.isMagnetometerAvailable && !self.motion.isMagnetometerActive{
             self.motion.magnetometerUpdateInterval = 1.0/Double(CONFIG.frequency)
-            self.motion.startMagnetometerUpdates(to: .main) { (magnetometerData, error) in
+            self.motion.startMagnetometerUpdates(to: motionQueue) { (magnetometerData, error) in
                 if let magData = magnetometerData {
                     let x = magData.magneticField.x
                     let y = magData.magneticField.y
@@ -137,7 +144,7 @@ public class MagnetometerSensor: AwareSensor {
                     let currentTime:Double = Date().timeIntervalSince1970
                     self.LAST_TS = currentTime
                     
-                    let data = MagnetometerData()
+                    var data = MagnetometerData()
                     data.timestamp = Int64(currentTime*1000)
                     data.x = magData.magneticField.x
                     data.y = magData.magneticField.y
@@ -185,15 +192,14 @@ public class MagnetometerSensor: AwareSensor {
     public override func stop() {
         if motion.isMagnetometerAvailable && motion.isMagnetometerActive {
             motion.stopMagnetometerUpdates()
+            motionQueue.cancelAllOperations()
             self.notificationCenter.post(name: .actionAwareMagnetometerStop, object: self)
         }
     }
     
     public override func sync(force: Bool = false) {
         if let engine = self.dbEngine{
-            engine.startSync(MagnetometerData.TABLE_NAME,
-                             MagnetometerData.self,
-                             DbSyncConfig().apply{config in
+            engine.startSync(DbSyncConfig().apply{config in
                 config.debug = self.CONFIG.debug
                 config.dispatchQueue = DispatchQueue(label: "com.awareframework.ios.sensor.magnetometer.sync.queue")
                 config.completionHandler = { (status, error) in
