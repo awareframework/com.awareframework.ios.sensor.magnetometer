@@ -10,7 +10,7 @@ public struct MagnetometerData: BaseDbModelSQLite {
     public var timezone: Int = AwareUtils.getTimeZone()
     public var os: String = "iOS"
     public var jsonVersion: Int = 1
-    public static let databaseTableName = "magnetometerData"
+    public static let databaseTableName = "ios_magnetometer"
 
     public var x: Double = 0.0
     public var y: Double = 0.0

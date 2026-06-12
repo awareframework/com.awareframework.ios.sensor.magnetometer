@@ -120,6 +120,9 @@ public class MagnetometerSensor: AwareSensor {
         super.init()
         self.CONFIG = config
         self.initializeDbEngine(config: config)
+        super.syncConfig = DbSyncConfig().apply { c in
+            c.dispatchQueue = DispatchQueue(label: "com.awareframework.ios.sensor.magnetometer.sync.queue")
+        }
         if config.debug{ print(MagnetometerSensor.TAG, "Magnetometer sensor is created. ") }
     }
     
@@ -198,22 +201,15 @@ public class MagnetometerSensor: AwareSensor {
     }
     
     public override func sync(force: Bool = false) {
-        if let engine = self.dbEngine{
-            engine.startSync(DbSyncConfig().apply{config in
-                config.debug = self.CONFIG.debug
-                config.dispatchQueue = DispatchQueue(label: "com.awareframework.ios.sensor.magnetometer.sync.queue")
-                config.completionHandler = { (status, error) in
-                    var userInfo: Dictionary<String,Any> = [MagnetometerSensor.EXTRA_STATUS :status]
-                    if let e = error {
-                        userInfo[MagnetometerSensor.EXTRA_ERROR] = e
-                    }
-                    self.notificationCenter.post(name: .actionAwareMagnetometerSyncCompletion,
-                                                 object: self,
-                                                 userInfo:userInfo)
-                }
-            })
-            self.notificationCenter.post(name: .actionAwareMagnetometerSync, object: self)
+        guard let engine = self.dbEngine, let syncConfig = self.syncConfig else { return }
+        syncConfig.debug = self.CONFIG.debug
+        syncConfig.completionHandler = { (status, error) in
+            var userInfo: Dictionary<String,Any> = [MagnetometerSensor.EXTRA_STATUS: status]
+            if let e = error { userInfo[MagnetometerSensor.EXTRA_ERROR] = e }
+            self.notificationCenter.post(name: .actionAwareMagnetometerSyncCompletion, object: self, userInfo: userInfo)
         }
+        engine.startSync(syncConfig)
+        self.notificationCenter.post(name: .actionAwareMagnetometerSync, object: self)
     }
     
     public override func set(label:String){

@@ -21,16 +21,16 @@ iOS 13 or later
 
 3. Import the package into your target.
 
-4. Import com.aware.ios.sensor.magnetometer library into your source code.
+4. Import com.awareframework.ios.sensor.magnetometer library into your source code.
 ```swift
-import com_aware_ios_sensor_magnetometer
+import com_awareframework_ios_sensor_magnetometer
 ```
 
 ## Public functions
 ### MagnetometerSensor
 
 + `init(config:MagnetometerSensor.Config?)` : Initializes the magnetometer sensor with the optional configuration.
-+ `start()`: Starts the gyroscope sensor with the optional configuration.
++ `start()`: Starts the magnetometer sensor with the optional configuration.
 + `stop()`: Stops the service.
 
 ### MagnetometerSensor.Config
@@ -55,7 +55,7 @@ Class to hold the configuration of the sensor.
 
 ### Fired Broadcasts
 
-+ `MagnetometerSensor.ACTION_AWARE_GYROSCOPE` fired when gyroscope saved data to db after the period ends.
++ `MagnetometerSensor.ACTION_AWARE_MAGNETOMETER` fired when magnetometer saved data to db after the period ends.
 
 ### Received Broadcasts
 
@@ -70,17 +70,19 @@ Class to hold the configuration of the sensor.
 
 Contains the raw sensor data.
 
-| Field     | Type   | Description                                                     |
-| --------- | ------ | --------------------------------------------------------------- |
-| x         | Double  | value of X axis                                                 |
-| y         | Double  | value of Y axis                                                 |
-| z         | Double  | value of Z axis                                                 |
-| label     | String | Customizable label. Useful for data calibration or traceability |
-| deviceId  | String | AWARE device UUID                                               |
-| label     | String | Customizable label. Useful for data calibration or traceability |
-| timestamp | Int64   | unixtime milliseconds since 1970                                |
-| timezone  | Int    | Raw timezone offset of the device                          |
-| os        | String | Operating system of the device (ex. ios)                    |
+| Field          | Type   | Description                                                     |
+| -------------- | ------ | --------------------------------------------------------------- |
+| x              | Double | value of X axis (µT)                                            |
+| y              | Double | value of Y axis (µT)                                            |
+| z              | Double | value of Z axis (µT)                                            |
+| eventTimestamp | Int64  | Unixtime milliseconds of the actual sensor event                |
+| accuracy       | Int    | Accuracy of the sensor data                                     |
+| label          | String | Customizable label. Useful for data calibration or traceability |
+| deviceId       | String | AWARE device UUID                                               |
+| timestamp      | Int64  | unixtime milliseconds since 1970                                |
+| timezone       | Int    | Raw timezone offset of the device                               |
+| os             | String | Operating system of the device (ex. ios)                        |
+| jsonVersion    | Int    | JSON schema version                                             |
 
 ## Example usage
 ```swift
