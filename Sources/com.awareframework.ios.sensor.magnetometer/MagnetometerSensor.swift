@@ -49,6 +49,7 @@ public class MagnetometerSensor: AwareSensor {
     var LAST_DATA:CMMagneticField?
     var LAST_TS:Double   = Date().timeIntervalSince1970
     var LAST_SAVE:Double = Date().timeIntervalSince1970
+    private var bootReferenceTime: Double = 0
     public var dataBuffer = Array<MagnetometerData>()
     private let motionQueue: OperationQueue = {
         let queue = OperationQueue()
@@ -128,6 +129,7 @@ public class MagnetometerSensor: AwareSensor {
     
     public override func start() {
         if self.motion.isMagnetometerAvailable && !self.motion.isMagnetometerActive{
+            bootReferenceTime = Date().timeIntervalSince1970 - ProcessInfo.processInfo.systemUptime
             self.motion.magnetometerUpdateInterval = 1.0/Double(CONFIG.frequency)
             self.motion.startMagnetometerUpdates(to: motionQueue) { (magnetometerData, error) in
                 if let magData = magnetometerData {
@@ -143,16 +145,16 @@ public class MagnetometerSensor: AwareSensor {
                         }
                     }
                     self.LAST_DATA = magData.magneticField
-                    
+
                     let currentTime:Double = Date().timeIntervalSince1970
                     self.LAST_TS = currentTime
-                    
+
                     var data = MagnetometerData()
                     data.timestamp = Int64(currentTime*1000)
                     data.x = magData.magneticField.x
                     data.y = magData.magneticField.y
                     data.z = magData.magneticField.z
-                    data.eventTimestamp = Int64(magData.timestamp*1000)
+                    data.eventTimestamp = Int64((self.bootReferenceTime + magData.timestamp)*1000)
                     data.label = self.CONFIG.label
                     
                     if let observer = self.CONFIG.sensorObserver {
