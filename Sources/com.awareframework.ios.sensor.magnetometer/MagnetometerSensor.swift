@@ -66,19 +66,19 @@ public class MagnetometerSensor: AwareSensor {
         public var sensorObserver: MagnetometerObserver? = nil
         
         /**
-         * Magnetometer frequency in hertz per second: e.g.
+         * Magnetometer samplingFrequencyHz in hertz per second: e.g.
          *
          * 0 - fastest
          * 1 - sample per second
          * 5 - sample per second
          * 20 - sample per second
          */
-        public var frequency: Int = 5
+        public var samplingFrequencyHz: Int = 5
         
         /**
-         * Period to save data in minutes. (optional)
+         * Period to save data in seconds. (optional)
          */
-        public var period: Double = 1
+        public var saveIntervalSeconds: Double = 60
         
         /**
          * Magnetometer threshold (float).  Do not record consecutive points if
@@ -94,12 +94,12 @@ public class MagnetometerSensor: AwareSensor {
         public override func set(config: Dictionary<String, Any>) {
             super.set(config: config)
             
-            if let frequency = config["frequency"] as? Int {
-                self.frequency = frequency
+            if let samplingFrequencyHz = config["samplingFrequencyHz"] as? Int {
+                self.samplingFrequencyHz = samplingFrequencyHz
             }
             
-            if let period = config["period"] as? Double {
-                self.period = period
+            if let saveIntervalSeconds = config["saveIntervalSeconds"] as? Double {
+                self.saveIntervalSeconds = saveIntervalSeconds
             }
             
             if let threshold = config["threshold"] as? Double {
@@ -130,7 +130,7 @@ public class MagnetometerSensor: AwareSensor {
     public override func start() {
         if self.motion.isMagnetometerAvailable && !self.motion.isMagnetometerActive{
             bootReferenceTime = Date().timeIntervalSince1970 - ProcessInfo.processInfo.systemUptime
-            self.motion.magnetometerUpdateInterval = 1.0/Double(CONFIG.frequency)
+            self.motion.magnetometerUpdateInterval = 1.0/Double(CONFIG.samplingFrequencyHz)
             self.motion.startMagnetometerUpdates(to: motionQueue) { (magnetometerData, error) in
                 if let magData = magnetometerData {
                     let x = magData.magneticField.x
@@ -163,7 +163,7 @@ public class MagnetometerSensor: AwareSensor {
                     
                     self.dataBuffer.append(data)
                     
-                    if currentTime < self.LAST_SAVE + (self.CONFIG.period * 60) {
+                    if currentTime < self.LAST_SAVE + (self.CONFIG.saveIntervalSeconds) {
                         return
                     }
                     

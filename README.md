@@ -2,19 +2,19 @@
 
 [![Swift Package Manager compatible](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
 
-This sensor module allows us to access the current **Magnetic Fluid** data. The data is provided by CMDeviceMotion in Core Motion library. Please check the link below for details. 
+This sensor module allows us to access the current **Magnetic Fluid** data. The data is provided by CMDeviceMotion in Core Motion library. Please check the link below for details.
 
 [ Apple | Getting Processed Device-Motion Data ](https://developer.apple.com/documentation/coremotion/getting_processed_device-motion_data)
 
 [ Apple | CMDeviceMotion | CMCalibratedMagneticField ](https://developer.apple.com/documentation/coremotion/cmdevicemotion/1616140-magneticfield)
 
 ## Requirements
-iOS 13 or later 
+iOS 13 or later
 
 ## Installation
 
 1. Open Package Manager Windows
-    * Open `Xcode` -> Select `Menu Bar` -> `File` -> `App Package Dependencies...` 
+    * Open `Xcode` -> Select `Menu Bar` -> `File` -> `App Package Dependencies...`
 
 2. Find the package using the manager
     * Select `Search Package URL` and type `https://github.com/awareframework/com.awareframework.ios.sensor.magnetometer.git`
@@ -26,10 +26,10 @@ iOS 13 or later
 import com_awareframework_ios_sensor_magnetometer
 ```
 
-## Public functions
+## Public Functions
 ### MagnetometerSensor
 
-+ `init(config:MagnetometerSensor.Config?)` : Initializes the magnetometer sensor with the optional configuration.
++ `init(config:MagnetometerSensor.Config?)`: Initializes the magnetometer sensor with the optional configuration.
 + `start()`: Starts the magnetometer sensor with the optional configuration.
 + `stop()`: Stops the service.
 
@@ -38,24 +38,25 @@ import com_awareframework_ios_sensor_magnetometer
 Class to hold the configuration of the sensor.
 
 #### Fields
+
 + `sensorObserver: MagnetometerObserver`: Callback for live data updates.
-+ `frequency: Int`: Data samples to collect per second (Hz). (default = 5)
-+ `period: Double`: Period to save data in minutes. (default = 1)
++ `samplingFrequencyHz: Int`: Data samples to collect per second (Hz). (default = `5`)
++ `saveIntervalSeconds: Double`: Interval in seconds at which buffered data is saved to the database. (default = `60`)
 + `threshold: Double`: If set, do not record consecutive points if change in value is less than the set value.
-+ `enabled: Boolean` Sensor is enabled or not. (default = `false`)
-+ `debug: Boolean` enable/disable logging to Xcode console. (default = `false`)
-+ `label: String` Label for the data. (default = "")
-+ `deviceId: String` Id of the device that will be associated with the events and the sensor. (default = "")
-+ `dbEncryptionKey` Encryption key for the database. (default = `null`)
-+ `dbType: Engine` Which db engine to use for saving data. (default = `Engine.DatabaseType.NONE`)
-+ `dbPath: String` Path of the database. (default = "aware_magnetometer")
-+ `dbHost: String` Host for syncing the database. (default = `null`)
++ `enabled: Bool`: Sensor is enabled or not. (default = `false`)
++ `debug: Bool`: Enable/disable logging. (default = `false`)
++ `label: String`: Label for the data. (default = `""`)
++ `deviceId: String`: Id of the device that will be associated with the events and the sensor. (default = `""`)
++ `dbEncryptionKey: String?`: Encryption key for the database. (default = `nil`)
++ `dbType: DatabaseType`: Which db engine to use for saving data. (default = `.none`)
++ `dbPath: String`: Path of the database. (default = `"aware_magnetometer"`)
++ `dbHost: String?`: Host for syncing the database. (default = `nil`)
 
 ## Broadcasts
 
 ### Fired Broadcasts
 
-+ `MagnetometerSensor.ACTION_AWARE_MAGNETOMETER` fired when magnetometer saved data to db after the period ends.
++ `MagnetometerSensor.ACTION_AWARE_MAGNETOMETER`: fired when magnetometer saved data to db after the save interval ends.
 
 ### Received Broadcasts
 
@@ -84,9 +85,9 @@ Contains the raw sensor data.
 | os             | String | Operating system of the device (ex. ios)                        |
 | jsonVersion    | Int    | JSON schema version                                             |
 
-## Example usage
+## Example Usage
 ```swift
-var magnetometer = MagnetometerSensor.init( MagnetometerSensor.Config().apply{ config in
+var magnetometer = MagnetometerSensor.init( MagnetometerSensor.Config().apply { config in
     config.debug = true
     config.sensorObserver = Observer()
 })
