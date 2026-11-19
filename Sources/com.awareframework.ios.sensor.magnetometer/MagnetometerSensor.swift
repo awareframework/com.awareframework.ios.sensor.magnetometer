@@ -92,6 +92,7 @@ public class MagnetometerSensor: AwareSensor {
     
         public override init() {
             super.init()
+            dbTableName = MagnetometerData.databaseTableName
             dbPath = "aware_magnetometer"
         }
         
@@ -121,10 +122,32 @@ public class MagnetometerSensor: AwareSensor {
         self.init(MagnetometerSensor.Config())
     }
     
+
+    /// Creates this sensor's table if it does not exist yet, so that the first save does not fail.
+    /// Failures are logged: without the table, the data cannot be saved or uploaded.
+    private func initializeTables() {
+        guard CONFIG.dbType == .sqlite else { return }
+        guard let queue = (dbEngine as? SQLiteEngine)?.getSQLiteInstance() else {
+            print(MagnetometerSensor.TAG, "[Error] Cannot open the database '\(CONFIG.dbPath)'. The table is not created.")
+            return
+        }
+        let tables: [(name: String, create: () throws -> Void)] = [
+            (MagnetometerData.databaseTableName, { try MagnetometerData.createTable(queue: queue) }),
+        ]
+        for table in tables {
+            do {
+                try table.create()
+            } catch {
+                print(MagnetometerSensor.TAG, "[Error] Cannot create the table '\(table.name)': \(error)")
+            }
+        }
+    }
+
     public init(_ config:MagnetometerSensor.Config){
         super.init()
         self.CONFIG = config
         self.initializeDbEngine(config: config)
+        initializeTables()
         super.syncConfig = DbSyncConfig().apply { c in
             c.dispatchQueue = DispatchQueue(label: "com.awareframework.ios.sensor.magnetometer.sync.queue")
         }
